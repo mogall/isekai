@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7933ba9039d4c6f49b723d5f7a9b8f07, type: 3}
+  m_Name: testredray
+  m_EditorClassIdentifier: 
+  name: Blue Ray Bird
+  skillType: 0
+  targetingMode: 1
+  range: 20
+  castPoint: 0
+  castCooldown: 0
+  UIsprite: {fileID: 21300000, guid: 6288fc9c8b8ad744793ded4fa0622586, type: 3}
+  skillPrefab: {fileID: 1708905051515210, guid: ffd4512012f55a34b89a6faf3fce8cb2,
+    type: 2}
+  triggerSkillEffects: []
+  tickSkillEffects:
+  - {fileID: 1737676904516636, guid: 7f93243376a234242823f8b0344001cc, type: 2}
+  endSkillEffects: []

@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f4d18aa687f0354f813fff1af1b67b0, type: 3}
+  m_Name: second item
+  m_EditorClassIdentifier: 
+  name: second item
+  uiSprite: {fileID: 21300000, guid: f6f8070897d8b324686dd8a10673b6f5, type: 3}
+  prefab: {fileID: 1893983413137882, guid: a9846abe610382f41a0b39094b5ea98c, type: 2}
