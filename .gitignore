@@ -4,6 +4,10 @@
 /[Bb]uild/
 /[Bb]uilds/
 /[Pp]lugins/
+Assets/Resources/blender imports
+Assets/Plugins
+Assets/Resources/store imports
+Assets/Resources/textures*
 
 /Assets/AssetStoreTools*
 
@@ -35,3 +39,4 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+*.blend
