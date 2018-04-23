@@ -21,10 +21,10 @@ public class PlayerCrafting : MonoBehaviour {
 	void Start(){
 		//selectedRecipe = knownRecipes [0]; //TODO -wow this is a fucking hack, fix this so when you open a window you don't have to hard code a first recipe the first time
 	}
-	public void Craft(){
+	public void Craft(){ //DONOW - update crafting so it takes amounts of crafting elements, in accordance to inventory stack update
 		if (selectedRecipe != null && PlayerInventory.instance.HasItems (selectedRecipe.recipeItem)) {
 			foreach (ItemData item in selectedRecipe.recipeItem) {
-				PlayerInventory.instance.Remove (item);
+				PlayerInventory.instance.RemoveOnID (item.ID, 1);
 			}
 			foreach (ItemData item in selectedRecipe.resultItem) {
 				PlayerInventory.instance.Add (item);

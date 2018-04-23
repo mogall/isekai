@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerGUI : MonoBehaviour {
 
-	PlayerInventory inventory;
+	PlayerInventory inventory; //DONOW - spawn gui inventory slots according to the inventory size(right now they're just there statically)
 	PlayerCrafting crafting;
 	PlayerController playerController;
 
@@ -13,11 +13,14 @@ public class PlayerGUI : MonoBehaviour {
 	List<GameObject> openPanels = new List<GameObject>();
 	public GameObject inventoryWrapper;
 	public GameObject inventoryGUIPanel;
+	List<InventorySlot> inventorySlot = new List<InventorySlot>(); //TODO - why is this a list?
+	public GameObject itemDragImage;
+	public GameObject inventorySlotPrefab;
 	public GameObject ContainterPanelWrapper;
 	public Text containerPanelName;
 	public GameObject progressBar;
 	public Image progressBarFill;
-	List<InventorySlot> inventorySlot = new List<InventorySlot>(); 
+
 	public GameObject skillBarWrapper;
 	public GameObject skillChoiceWindowWrapper;
 	public GameObject skillChoiceWindowIconPrefab;
@@ -48,12 +51,13 @@ public class PlayerGUI : MonoBehaviour {
 		inventory.onInventoryChangedCallback += UpdateInventorySlots;
 		crafting.onCraftingListChangedCallback += UpdateRecipeList;
 
-		foreach (Transform child in inventoryGUIPanel.transform) {
+		/*foreach (Transform child in inventoryGUIPanel.transform) {
 			inventorySlot.Add (child.GetComponent<InventorySlot>());
-		}
+		}*/
 		//inventorySlot = inventoryGUIPanel.GetComponentsInChildren<Image> (); 
 		progressBarFill.fillAmount = 0;
 		progressBar.SetActive (false);
+		itemDragImage.SetActive (false);
 		for (int i = 0; i < skillBarImage.Length; i++) {
 			skillBarImage [i] = skillBarWrapper.transform.GetChild (i).GetComponent<Image> ();
 		}
@@ -70,21 +74,23 @@ public class PlayerGUI : MonoBehaviour {
 			OpenRecipePanel ();
 		}
 	}
-	void UpdateInventorySlots(){ //TODO - change this along with the inventory method so the player can move the inventory items around
+	public void UpdateGUIInventorySlotNumber(int j){
+		for (int i = 0; i < j; i++) { //TODO - pool this
+			GameObject slot = Instantiate(inventorySlotPrefab, transform.position, Quaternion.identity);
+			slot.transform.parent = inventoryGUIPanel.transform;
+			InventorySlot invSlot = slot.GetComponent<InventorySlot> ();
+			invSlot.slotID = i;
+			inventorySlot.Add (invSlot);
+		}
+	}
+	void UpdateInventorySlots(){
 		Debug.Log("updating inventory slots");
-		for (int i = 0; i < inventorySlot.Count; i++) {
-			if (i < inventory.inventoryItems.Count) {
-				inventorySlot [i].AddItemInSlot (inventory.inventoryItems [i]);
-			} else {
+		for (int i = 0; i < inventory.inventorySize; i++) {
+			if (inventory.inventory [i].stackSize < 1) {
 				inventorySlot [i].ClearSlotData ();
+			} else {
+				inventorySlot [i].AddItemInSlot (inventory.inventory [i].item, inventory.inventory[i].stackSize);
 			}
-
-
-
-			/*inventorySlot [i].itemIcon.sprite = inventory.inventoryItems [i].uiSprite;
-			inventorySlot [i].itemData = inventory.inventoryItems [i];
-			inventorySlot [i].deleteButton.interactable = true;
-			inventorySlot [i].dropButton.interactable = true;*/
 		}
 	}
 	public void OpenContainerPanel(List<ItemData> items, string containerName){
@@ -95,7 +101,7 @@ public class PlayerGUI : MonoBehaviour {
 		playerController.SetCameraMode (CameraMode.UI);
 		Transform slotWrapper = ContainterPanelWrapper.transform.GetChild (0);
 		for (int i = 0; i < items.Count; i++) {
-			slotWrapper.GetChild (i).GetComponent<ContainerSlot> ().AddItemInSlot (items [i]);
+			slotWrapper.GetChild (i).GetComponent<ContainerSlot> ().AddItemInSlot (items [i], items[i].stackSize);
 		}
 		containerPanelName.text = containerName;
 	}

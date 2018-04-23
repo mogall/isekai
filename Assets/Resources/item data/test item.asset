@@ -11,6 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f4d18aa687f0354f813fff1af1b67b0, type: 3}
   m_Name: test item
   m_EditorClassIdentifier: 
+  ID: 5
   name: test123name
   uiSprite: {fileID: 21300000, guid: 286d9b4d7d9d1c04992ff55501951568, type: 3}
   prefab: {fileID: 1893983413137882, guid: a9846abe610382f41a0b39094b5ea98c, type: 2}
+  stackable: 0
+  stackSize: 1
