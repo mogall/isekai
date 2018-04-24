@@ -12,12 +12,17 @@ MonoBehaviour:
   m_Name: test crafting recipe
   m_EditorClassIdentifier: 
   recipeName: test crafting
-  recipeItem:
-  - {fileID: 11400000, guid: c59f39fdbcc068841b3c1be2e8b1e089, type: 2}
-  - {fileID: 11400000, guid: bfcdf432637f8a94bb7842801be3bd80, type: 2}
-  - {fileID: 11400000, guid: 34642255c9e547442abda2629aada6e5, type: 2}
-  resultItem:
-  - {fileID: 11400000, guid: c422041b45eb56046909f7704e18eb5c, type: 2}
-  requiredTool: []
+  recipeItems:
+  - itemData: {fileID: 11400000, guid: c59f39fdbcc068841b3c1be2e8b1e089, type: 2}
+    amount: 1
+  - itemData: {fileID: 11400000, guid: bfcdf432637f8a94bb7842801be3bd80, type: 2}
+    amount: 2
+  - itemData: {fileID: 11400000, guid: 34642255c9e547442abda2629aada6e5, type: 2}
+    amount: 1
+  resultItems:
+  - itemData: {fileID: 11400000, guid: c422041b45eb56046909f7704e18eb5c, type: 2}
+    amount: 2
+  requiredTool:
+  - {fileID: 11400000, guid: de516f35b9c69904293b99a7372cd561, type: 2}
   requiredCraftStation: 0
   craftTime: 2

@@ -22,3 +22,17 @@ MonoBehaviour:
   requiredTool: []
   requiredCraftStation: 0
   craftTime: 3
+  recipeItems:
+  - itemData: {fileID: 11400000, guid: bfcdf432637f8a94bb7842801be3bd80, type: 2}
+    amount: 2
+  - itemData: {fileID: 11400000, guid: c59f39fdbcc068841b3c1be2e8b1e089, type: 2}
+    amount: 1
+  - itemData: {fileID: 11400000, guid: 34642255c9e547442abda2629aada6e5, type: 2}
+    amount: 1
+  - itemData: {fileID: 11400000, guid: 589205a9eeb782e4697ccabc6ebccfe8, type: 2}
+    amount: 3
+  resultItems:
+  - itemData: {fileID: 11400000, guid: c422041b45eb56046909f7704e18eb5c, type: 2}
+    amount: 1
+  - itemData: {fileID: 11400000, guid: 3845bc0b3fa6e634e8137511c1cca4a7, type: 2}
+    amount: 1

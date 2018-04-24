@@ -21,13 +21,21 @@ public class PlayerCrafting : MonoBehaviour {
 	void Start(){
 		//selectedRecipe = knownRecipes [0]; //TODO -wow this is a fucking hack, fix this so when you open a window you don't have to hard code a first recipe the first time
 	}
-	public void Craft(){ //DONOW - update crafting so it takes amounts of crafting elements, in accordance to inventory stack update
-		if (selectedRecipe != null && PlayerInventory.instance.HasItems (selectedRecipe.recipeItem)) {
-			foreach (ItemData item in selectedRecipe.recipeItem) {
-				PlayerInventory.instance.RemoveOnID (item.ID, 1);
+	public void Craft(){ 
+		if (selectedRecipe != null && CheckRecipeIngredientsAvailability(selectedRecipe.recipeItems) == true && CheckRecipeToolAvailability(selectedRecipe.requiredTool) == true) {
+			foreach (RecipeItem item in selectedRecipe.recipeItems) {
+				PlayerInventory.instance.RemoveOnID (item.itemData.ID, item.amount);
 			}
-			foreach (ItemData item in selectedRecipe.resultItem) {
-				PlayerInventory.instance.Add (item);
+			foreach (RecipeItem item in selectedRecipe.resultItems) {
+				if (item.itemData.stackable == false) {
+					for (int i = 0; i < item.amount; i++) {
+						PlayerInventory.instance.Add (item.itemData);
+					}
+				} else {
+					item.itemData.stackSize = item.amount; 
+					PlayerInventory.instance.Add (item.itemData); 
+				}
+
 			}
 			print ("item crafted!");
 			PlayerGUI.instance.SetSelectedRecipe (); //TODO - make a proper gui update when you finish crafting, calling this method is a hack
@@ -60,6 +68,22 @@ public class PlayerCrafting : MonoBehaviour {
 		knownRecipes.Remove (recipe);
 		if (onCraftingListChangedCallback != null) {
 			onCraftingListChangedCallback.Invoke (); //
+		}
+		return true;
+	}
+	bool CheckRecipeIngredientsAvailability(List<RecipeItem> recipeList){ //UPGRADE - as written in inventory, this seems to be very slow, iterating through whole inventory every item
+		foreach (RecipeItem item in recipeList) { 
+			if (PlayerInventory.instance.HasItem (item.itemData, item.amount) == false) {
+				return false;
+			}
+		}
+		return true;
+	}
+	bool CheckRecipeToolAvailability(List<ItemData> toolList){  //TODO - does this check/run/return true if the list is empty(i.e. no tools required)?
+		foreach (ItemData tool in toolList) {
+			if (PlayerInventory.instance.HasItem(tool) == false) {
+				return false;
+			}
 		}
 		return true;
 	}

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerGUI : MonoBehaviour {
 
-	PlayerInventory inventory; //DONOW - spawn gui inventory slots according to the inventory size(right now they're just there statically)
+	PlayerInventory inventory; 
 	PlayerCrafting crafting;
 	PlayerController playerController;
 
@@ -32,6 +32,7 @@ public class PlayerGUI : MonoBehaviour {
 	public GameObject recipeListElement;
 	public GameObject ingredientList;
 	public GameObject resultList;
+	public GameObject toolList;
 	public GameObject ingredientListElement;
 
 
@@ -160,29 +161,42 @@ public class PlayerGUI : MonoBehaviour {
 			listItem.transform.parent = recipeList.transform;
 			listItem.transform.localScale = new Vector3 (1, 1, 1);
 			listItem.GetComponent<CraftingRecipeListElement> ().recipe = recipe;
-			listItem.transform.GetChild (0).GetComponent<Image> ().sprite = recipe.resultItem [0].uiSprite;
+			listItem.transform.GetChild (0).GetComponent<Image> ().sprite = recipe.resultItems [0].itemData.uiSprite; //FIX - this will take only one result, if there's more, they will not be shown
 			listItem.transform.GetChild (1).GetComponent<Text> ().text = recipe.recipeName;
 		}
 	}
-	public void SetSelectedRecipe(){
+	public void SetSelectedRecipe(){ 
 		ClearRecipeWindow ();
-		CraftingRecipe recipe = PlayerCrafting.instance.selectedRecipe;
+		CraftingRecipe recipe = PlayerCrafting.instance.selectedRecipe; //TODO UPGRADE - pool all this method
 		if (recipe != null) {
-			foreach (ItemData recipeItem in recipe.recipeItem) {
+			foreach (RecipeItem item in recipe.recipeItems) {
 				GameObject ingredient = Instantiate (ingredientListElement, transform.position, Quaternion.identity);
 				ingredient.transform.parent = ingredientList.transform;
 				ingredient.transform.localScale = new Vector3 (1, 1, 1);
 				Image img = ingredient.GetComponent<Image> ();
-				img.sprite = recipeItem.uiSprite;
-				if (!PlayerInventory.instance.HasItem (recipeItem)) {
+				img.sprite = item.itemData.uiSprite;
+				if (!PlayerInventory.instance.HasItem (item.itemData, item.amount)) {
 					img.color = Color.red;
 				}
+				ingredient.transform.GetChild (0).GetComponent<Text> ().text = item.amount.ToString();
 			}
-			foreach (ItemData resultItem in recipe.resultItem) {
+			foreach (RecipeItem resultItem in recipe.resultItems) {
 				GameObject result = Instantiate (ingredientListElement, transform.position, Quaternion.identity);
 				result.transform.parent = resultList.transform;
 				result.transform.localScale = new Vector3 (1, 1, 1);
-				result.GetComponent<Image> ().sprite = resultItem.uiSprite;
+				result.GetComponent<Image> ().sprite = resultItem.itemData.uiSprite;
+				result.transform.GetChild (0).GetComponent<Text> ().text = resultItem.amount.ToString ();
+			}
+			foreach (ItemData toolItem in recipe.requiredTool) {
+				GameObject tool = Instantiate (ingredientListElement, transform.position, Quaternion.identity);
+				tool.transform.parent = toolList.transform;
+				tool.transform.localScale = new Vector3 (1, 1, 1);
+				Image img = tool.GetComponent<Image> ();
+				img.sprite = toolItem.uiSprite;
+				if (!PlayerInventory.instance.HasItem (toolItem)) {
+					img.color = Color.red;
+				}
+				tool.transform.GetChild (0).GetComponent<Text> ().text = toolItem.stackSize.ToString ();
 			}
 		}
 	}
@@ -192,6 +206,9 @@ public class PlayerGUI : MonoBehaviour {
 		}
 		foreach (Transform result in resultList.transform) {
 			Destroy (result.gameObject);
+		}
+		foreach (Transform tool in toolList.transform) {
+			Destroy (tool.gameObject);
 		}
 	}
 	public void OpenRecipePanel(){

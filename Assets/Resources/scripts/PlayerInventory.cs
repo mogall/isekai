@@ -17,11 +17,12 @@ public class PlayerInventory : MonoBehaviour {
 	public int inventorySize = 10;
 	public InventorySlot[] inventory;
 
+	//NOTES FOR FUTURE UPGRADES?
 	//private Dictionary<ItemData, int> inventorySlot;
-	//public InventorySlot[] inventory; //DONOW - inventory is a "list" of inventoryslots. it's an array so you can drag and drop(with list it gets shortened and whatnot.
-	//DONOW - to add - search for first and if stackable, add to it. if not, add to first free. add drag and drop, dropping from inventory etc(add "droppable" property?)
-	//DONOW - CHANGE OF PLANS - MAKE A STRUCT INVENTORYSLOT, THEN A SINGLE DIMENSION ARRAY OF THE STRUCTS
-	//DONOW - OR ACTUALLY NOW, JUST DO AN ARRAY OF DICTIONARY STUFF
+	//public InventorySlot[] inventory; inventory is a "list" of inventoryslots. it's an array so you can drag and drop(with list it gets shortened and whatnot.
+	//to add - search for first and if stackable, add to it. if not, add to first free. add drag and drop, dropping from inventory etc(add "droppable" property?)
+	//CHANGE OF PLANS - MAKE A STRUCT INVENTORYSLOT, THEN A SINGLE DIMENSION ARRAY OF THE STRUCTS
+	//OR ACTUALLY NOW, JUST DO AN ARRAY OF DICTIONARY STUFF
 	//or maybe try dictionaries, like that dude wrote, just try to understandit with the gethashcode override
 	//>Dictionary<Position, ItemSlot> itemSlots
 	//>Dictionary<Item, List<ItemSlot>> itemsToItemSlots - that's what he had
@@ -81,7 +82,7 @@ public class PlayerInventory : MonoBehaviour {
 	}
 	public bool RemoveOnID(int id, int amount){
 		for (int i = 0; i < inventory.Length; i++) {
-			if (inventory[i].item.ID == id) {
+			if (inventory[i].item != null && inventory[i].item.ID == id) {
 				if (amount > 0) {
 					inventory [i].stackSize -= amount;
 					if (inventory [i].stackSize <= 0) {
@@ -126,9 +127,17 @@ public class PlayerInventory : MonoBehaviour {
 			data.itemData.stackSize = amount; //TODO - check if this is working correctly
 		}
 	}
-	public bool HasItem(ItemData data){
+	public bool HasItem(ItemData data){ //UPGRADE - if i invoke this on a recipe, i have to iterate through WHOLE inventory x number of recipe items. it's ridiculous, upgrade this.
 		for (int i = 0; i < inventory.Length; i++) {
-			if (inventory[i].item.ID == data.ID) {
+			if (inventory[i].item != null && inventory[i].item.ID == data.ID) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public bool HasItem(ItemData data, int amount){
+		for (int i = 0; i < inventory.Length; i++) {
+			if (inventory[i].item != null && inventory[i].item.ID == data.ID && inventory[i].stackSize >= amount) {
 				return true;
 			}
 		}
