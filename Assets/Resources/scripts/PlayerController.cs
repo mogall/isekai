@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour {
 	Transform cameraT;
 	CharacterController controller;
 	PlayerAnimator animator;
-	public Transform skillOriginator;
+	public Transform abilityOriginator;
 
 	  //TODO - make this use some sort of a global var for skillbar size(not that it would get dynamically changed or something)
 
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour {
 			//print ("dupa");
 			//animator.SwingWeapon ();
 		}
-		if (cameraMode == CameraMode.MOVEMENT) {
+		if (cameraMode == CameraMode.MOVEMENT && playerMovementState != PlayerMovementState.DASHING) {
 			Vector2 input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical")).normalized;
 			bool running = Input.GetKey (KeyCode.LeftShift);
 			Rotate ();
@@ -218,5 +218,23 @@ public class PlayerController : MonoBehaviour {
 		PlayerGUI.instance.SetProgressBarFillAmount (0, 0, false);
 		interacting = false;
 		interactTime = 0;
+	}
+	public void TeleportToCursor(float range){ //should these be here or moved to individual skill functionality?
+		Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+		Vector3 targetPoint = ray.GetPoint (range);
+		RaycastHit hit;
+		if (Physics.Raycast (transform.position+Vector3.up, targetPoint - transform.position, out hit, range)) { //FIX - this vector3up is temporary fix. transPos fires from feet so it doesn't really work, fix this
+			targetPoint = hit.point;
+			Debug.DrawLine (transform.position, hit.point, Color.red, 1f, false);
+		}
+		TeleportToLocation (targetPoint);
+	}
+	public void TeleportToLocation(Vector3 location){ //is this really needed? looks like a glorified transform.position thing
+		//TODO - set movement/action state flags properly here?
+		transform.position = location;
+	}
+	public void Dash(Vector2 dir, float speedMult){
+		currentSpeed = runSpeed * speedMult;
+		Move (dir, false);
 	}
 }

@@ -1,16 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//DONOW - RENAME SKILLS TO ABILITIES
 public class PlayerSkills : MonoBehaviour {
-	
-	public List<SkillData> knownSkills = new List<SkillData>();
-	public SkillData[] skillBar = new SkillData[4];
-	public SkillData targetingSkill = null;
+	public List<AbilityData> knownSkills = new List<AbilityData>();
+	public AbilityData[] skillBar = new AbilityData[4];
+	public AbilityData targetingSkill = null;
 	GameObject currentTargeter;
 	public GameObject pointTargeter;
 
-	public SkillData mainHandSkill;
+	public AbilityData mainHandSkill;
 
 	public static PlayerSkills instance;
 	void Awake() {
@@ -44,9 +43,10 @@ public class PlayerSkills : MonoBehaviour {
 
 			//UseSkill (3);
 		}
-		if (Input.GetMouseButtonDown (0) && PlayerController.instance.cameraMode == CameraMode.MOVEMENT) {
+		if (Input.GetMouseButtonDown (0) && PlayerController.instance.cameraMode == CameraMode.MOVEMENT) { //TODO - check for weapon type here and attack accordingly
 			if (PlayerController.instance.playerActionState == PlayerActionState.NOTHING) {//TODO - wouldn't it be better to have a callback when camera mode changes?
-				UseMainHandSkill ();
+				//UseMainHandSkill ();
+				MeleeAttack();
 			}else if (PlayerController.instance.playerActionState == PlayerActionState.TARGETING) {
 				print ("using skill");
 				UseSkill (targetingSkill);
@@ -61,12 +61,30 @@ public class PlayerSkills : MonoBehaviour {
 			}
 		}
 	}
-	void UseMainHandSkill(){
-		mainHandSkill.Use (); //TODO - this is a bit shit, no checks if there is a skill at all, so change it later, ALSO IT'S BROKEN AFTER REFACTORING SKILLS/SPELLS, FIX
+	public void MeleeAttack(){ //DONOW - change the name of this
+		//DONOW - implement melee system IMMEDIATELY
+		//DONOW - after immplementing weapons, expand this so it gets data from a weapon(attack speed etc), and gets animation from it too.
+		//ADD - delay for attack point here
+		//ADD - different types of attacks, it's only raycast with range now
+		//ADD - animation here
+		RaycastHit hit;
+		if (Physics.Raycast (PlayerController.instance.cameraBoom.transform.position, PlayerController.instance.cameraBoom.transform.forward, out hit, 1)) { //TODO - all temporary stats
+			ITakeDamage enemy = hit.collider.GetComponent<ITakeDamage> (); 
+			if (enemy != null) {
+				print ("hitting enemy with melee!");
+				enemy.TakeDamage (1); 
+			} else {
+				//do something here if not hit
+			}
+
+		}
 	}
-	void UseSkill(SkillData _data){
+	/*void UseMainHandSkill(){ //REMOVE - moved to playercombat
+		mainHandSkill.Use (); //TODO - this is a bit shit, no checks if there is a skill at all, so change it later, ALSO IT'S BROKEN AFTER REFACTORING SKILLS/SPELLS, FIX
+	}*/
+	void UseSkill(AbilityData _data){
 		//SkillData data = knownSkills[slot];
-		SkillData data = _data;
+		AbilityData data = _data;
 		if (data != null) {
 			data.Use ();
 		} else {
@@ -75,7 +93,7 @@ public class PlayerSkills : MonoBehaviour {
 
 
 	}
-	public void SetSkillInSlot(int slot, SkillData skill){ //this sets the skill in the skill bar slot. it will automatically toggle the gui panel off for the skill choice
+	public void SetSkillInSlot(int slot, AbilityData skill){ //this sets the skill in the skill bar slot. it will automatically toggle the gui panel off for the skill choice
 		skillBar [slot] = skill;
 		PlayerGUI.instance.skillBarImage [slot].sprite = skill.UIsprite;
 		PlayerGUI.instance.ToggleGUIPanel (PlayerGUI.instance.skillChoiceWindowWrapper);
@@ -87,9 +105,8 @@ public class PlayerSkills : MonoBehaviour {
 			targetingSkill.Use ();
 			break;
 		case TargetingMode.POINT:
-			currentTargeter = Instantiate (pointTargeter, PlayerController.instance.skillOriginator.position, Quaternion.identity);
-			currentTargeter.GetComponent<PointTargeter> ().range = targetingSkill.range;
-			//currentTargeter.GetComponent<PointTargeter>().range
+			currentTargeter = Instantiate (pointTargeter, PlayerController.instance.abilityOriginator.position, Quaternion.identity);
+			//currentTargeter.GetComponent<PointTargeter> ().range = targetingSkill.range; //FIX - broken after refactoring skill effects
 			break;
 		default:
 			print ("something wrong with the targeting mode, no targeter selected");

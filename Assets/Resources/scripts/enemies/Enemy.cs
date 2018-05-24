@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour, ITakeDamage, IEnemyIdleBehaviour {
+public class Enemy : MonoBehaviour, ITakeDamage, IEnemyIdleBehaviour { //TODO DONOW? - itakedamage doesn't really make much sense here now - split to master enemy controller class and use it to controll movement and aggro classes?
 	public int maxHP = 1;
 	public int currentHP = 1;
 	public float speed = 0;

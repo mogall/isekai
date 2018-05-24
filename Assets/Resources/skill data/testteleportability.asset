@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ca25dc09446a464c902aa5bc5a3acca, type: 3}
+  m_Name: testteleportability
+  m_EditorClassIdentifier: 
+  name: teleport
+  abilityType: 0
+  targetingMode: 0
+  castPoint: 0
+  castCooldown: 0
+  UIsprite: {fileID: 21300000, guid: d3ad674069344b74e80353d65abd830c, type: 3}
+  startEffect:
+  - {fileID: 1913006011995048, guid: fc4fbdc51aaaef3489b321b4ca887e95, type: 2}
+  tickEffect: []
+  endEffect: []

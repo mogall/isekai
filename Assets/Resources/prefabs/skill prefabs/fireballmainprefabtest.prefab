@@ -111,11 +111,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cab680da19c2bc48a3f077e32f79466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillData: {fileID: 0}
-  skillType: 0
-  triggerSkillEffects: []
-  tickSkillEffects: []
-  endSkillEffects: []
+  abilityData: {fileID: 0}
+  abilityType: 0
+  startEffect: []
+  tickEffect: []
+  endEffect:
+  - {fileID: 1371763249146452, guid: 588248d4259c9ec41958fbbf4e271c11, type: 2}
   castPoint: 0
   castCooldown: 0
   range: 20

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class PlayerInventory : MonoBehaviour {
 
@@ -9,23 +11,21 @@ public class PlayerInventory : MonoBehaviour {
 
 	//public List<ItemData> inventoryItems = new List<ItemData>(); //TODO - change this along with the gui method so the player can move the inventory items around
 
-	public struct InventorySlot
+	public struct InventorySlotStruct //TODO - if i have inventoryslot class, why have this? and doesn't it get fucked up when i have two things with the same name?
 	{
 		public ItemData item;
 		public int stackSize;
 	}
 	public int inventorySize = 10;
-	public InventorySlot[] inventory;
-
-	//NOTES FOR FUTURE UPGRADES?
+	public InventorySlotStruct[] inventory;
+	//ADD TODO NOTES FOR FUTURE UPGRADES?
 	//private Dictionary<ItemData, int> inventorySlot;
 	//public InventorySlot[] inventory; inventory is a "list" of inventoryslots. it's an array so you can drag and drop(with list it gets shortened and whatnot.
-	//to add - search for first and if stackable, add to it. if not, add to first free. add drag and drop, dropping from inventory etc(add "droppable" property?)
-	//CHANGE OF PLANS - MAKE A STRUCT INVENTORYSLOT, THEN A SINGLE DIMENSION ARRAY OF THE STRUCTS
-	//OR ACTUALLY NOW, JUST DO AN ARRAY OF DICTIONARY STUFF
-	//or maybe try dictionaries, like that dude wrote, just try to understandit with the gethashcode override
+	//add dropable property to itemdata?
+	//from the thread:
 	//>Dictionary<Position, ItemSlot> itemSlots
 	//>Dictionary<Item, List<ItemSlot>> itemsToItemSlots - that's what he had
+	//gethashcode override
 
 	public static PlayerInventory instance;
 	void Awake() {
@@ -36,7 +36,7 @@ public class PlayerInventory : MonoBehaviour {
 		}
 	}
 	void Start(){
-		inventory = new InventorySlot[inventorySize]; //TODO - make a method for changing inventory size when you pick up an new backpack or something
+		inventory = new InventorySlotStruct[inventorySize]; //TODO - make a method for changing inventory size when you pick up an new backpack or something
 		PlayerGUI.instance.UpdateGUIInventorySlotNumber(inventorySize); 
 	}
 	public bool Add (ItemData item){
@@ -73,10 +73,10 @@ public class PlayerInventory : MonoBehaviour {
 		if (amount > 0) {
 			inventory [i].stackSize -= amount;
 			if (inventory [i].stackSize <= 0) {
-				inventory [i] = new InventorySlot ();
+				inventory [i] = new InventorySlotStruct ();
 			}
 		} else {
-			inventory [i] = new InventorySlot ();
+			inventory [i] = new InventorySlotStruct ();
 		}
 		UpdateInventoryUI ();
 	}
@@ -86,10 +86,10 @@ public class PlayerInventory : MonoBehaviour {
 				if (amount > 0) {
 					inventory [i].stackSize -= amount;
 					if (inventory [i].stackSize <= 0) {
-						inventory [i] = new InventorySlot ();
+						inventory [i] = new InventorySlotStruct ();
 					}
 				} else {
-					inventory [i] = new InventorySlot ();
+					inventory [i] = new InventorySlotStruct ();
 				}
 				UpdateInventoryUI ();
 				return true;
@@ -106,7 +106,7 @@ public class PlayerInventory : MonoBehaviour {
 		}
 		inventory [toslot].item = data;
 		inventory [toslot].stackSize = stackSize;
-		inventory [fromslot] = new InventorySlot ();
+		inventory [fromslot] = new InventorySlotStruct ();
 		UpdateInventoryUI ();
 	}
 	public void SwitchItemsBetweenSlots(int slot1, int slot2){
@@ -143,7 +143,7 @@ public class PlayerInventory : MonoBehaviour {
 		}
 		return false;
 	}
-	public bool HasItems(List<ItemData> data){
+	public bool HasItems(List<ItemData> data){ //FIX - this doesn't check for amounts
 		foreach (ItemData dataItem in data) {
 			if (!HasItem(dataItem)) {
 				return false;
@@ -156,4 +156,50 @@ public class PlayerInventory : MonoBehaviour {
 			onInventoryChangedCallback.Invoke ();
 		}
 	}
+
+	// ITEM SLOTS DRAGGING METHODS //
+
+	public void BeginSlotDrag(){
+		//do i need this?
+	}
+
+	public void SlotDrag(InventorySlot slot){
+		print ("dupa");
+		if (slot.itemData != null) {
+			if (PlayerGUI.instance.itemDragImage.activeSelf == false) {
+				PlayerGUI.instance.itemDragImage.SetActive (true);
+				PlayerGUI.instance.itemDragImage.GetComponent<Image> ().sprite = slot.itemIcon.sprite;
+				PlayerGUI.instance.itemDragImage.transform.position = Input.mousePosition;
+			} else {
+				PlayerGUI.instance.itemDragImage.transform.position = Input.mousePosition;
+			}
+		}
+	}
+
+	public void EndSlotDrag(InventorySlot slot){ 
+		PlayerGUI.instance.itemDragImage.SetActive (false);
+		//TODO - this is the raycast setup that finds the inventory slot gui element - this is extremely crude, so upgrade it later or just move it somewhere
+		PointerEventData pointerData = new PointerEventData (EventSystem.current) { 
+			pointerId = -1,
+		};
+		pointerData.position = Input.mousePosition;
+		List<RaycastResult> results = new List<RaycastResult> ();
+		EventSystem.current.RaycastAll (pointerData, results);
+		//print (results.Count);
+		if (results.Count == 0) { //TODO - is this really going to return 0 if it doesn't end on any gui element?
+			//TODO - DROP ITEM HERE
+			print("item dropping is not implemented yet");
+		}
+		foreach (RaycastResult result in results) {
+			if (result.gameObject.name.Contains("Inventory Slot")) {
+				InventorySlot resultSlot = result.gameObject.GetComponent<InventorySlot> ();
+				if (resultSlot.itemData == null) {
+					PlayerInventory.instance.MoveItemFromToSlot (slot.slotID, resultSlot.slotID);
+				} else {
+					PlayerInventory.instance.SwitchItemsBetweenSlots (slot.slotID, resultSlot.slotID);
+				}
+			}
+		}
+	}
+
 }

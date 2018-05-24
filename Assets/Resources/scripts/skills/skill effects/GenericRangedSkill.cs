@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenericRangedSkill : Skill { //TODO - MAKE A BASE SKILL CLASS TO PUT ALL THE "INSTANTIATE EFFECT" STUFF THERE SO YOU DON'T HAVE TO REPEAT IT EVERY TIME, ALSO MAKE IT INTO  A BEHAVIOR, SO YOU GET CONTINUOUS SKILL EFFECT IN SKILL DATA
-	
+public class GenericRangedSkill : Ability { //TODO - MAKE A BASE SKILL CLASS TO PUT ALL THE "INSTANTIATE EFFECT" STUFF THERE SO YOU DON'T HAVE TO REPEAT IT EVERY TIME, ALSO MAKE IT INTO  A BEHAVIOR, SO YOU GET CONTINUOUS SKILL EFFECT IN SKILL DATA
 	public float maxSpeed;
 	public float acceleration;
+	public float range;
 	public Vector3 targetPoint;
 	Vector3 startingPosition;
 	float speed;
@@ -32,8 +32,8 @@ public class GenericRangedSkill : Skill { //TODO - MAKE A BASE SKILL CLASS TO PU
 		Destroy (gameObject);
 	}
 	void OnDestroy(){
-		foreach (GameObject endEffect in skillData.endSkillEffects) {
-			Instantiate (endEffect, transform.position, Quaternion.identity);
+		foreach (GameObject effect in endEffect) {
+			Instantiate (effect, transform.position, Quaternion.identity);
 		}
 	}
 }

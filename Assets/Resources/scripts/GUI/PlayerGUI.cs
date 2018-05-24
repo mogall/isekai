@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerGUI : MonoBehaviour {
-
+	//TODO - add item use on right click
 	PlayerInventory inventory; 
 	PlayerCrafting crafting;
 	PlayerController playerController;
@@ -84,7 +84,7 @@ public class PlayerGUI : MonoBehaviour {
 			inventorySlot.Add (invSlot);
 		}
 	}
-	void UpdateInventorySlots(){
+	void UpdateInventorySlots(){ //TODO - this is too resource-intensive - change to callbacks?
 		Debug.Log("updating inventory slots");
 		for (int i = 0; i < inventory.inventorySize; i++) {
 			if (inventory.inventory [i].stackSize < 1) {

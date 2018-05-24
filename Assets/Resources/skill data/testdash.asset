@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ca25dc09446a464c902aa5bc5a3acca, type: 3}
+  m_Name: testdash
+  m_EditorClassIdentifier: 
+  name: dash
+  abilityType: 0
+  targetingMode: 0
+  castPoint: 0
+  castCooldown: 0
+  UIsprite: {fileID: 21300000, guid: cefd54faa24dccf4484dd51676100566, type: 3}
+  startEffect:
+  - {fileID: 1782718022065430, guid: 281b5cb743e2a554db62228847bb7161, type: 2}
+  tickEffect: []
+  endEffect: []

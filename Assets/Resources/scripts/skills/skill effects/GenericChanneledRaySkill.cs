@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-public class GenericChanneledRaySkill : Skill {
+public class GenericChanneledRaySkill : Ability {
 	public LineRenderer rend;
 	public Vector3 targetPoint;
+	public float range;
 	public float damagePeriod = 0;
 	float damageTick = 0;
 	public int damage;
@@ -13,7 +14,7 @@ public class GenericChanneledRaySkill : Skill {
 	void Start(){
 		PlayerController.instance.playerActionState = PlayerActionState.CHANNELING;
 		rend.SetPosition (0, transform.position);
-		transform.parent = PlayerController.instance.skillOriginator;
+		transform.parent = PlayerController.instance.abilityOriginator;
 		damageTick = damagePeriod;
 	}
 
@@ -26,8 +27,8 @@ public class GenericChanneledRaySkill : Skill {
 			RaycastHit hit;
 			if (Physics.Raycast (transform.position, targetPoint - transform.position, out hit, range)) {
 				rend.SetPosition (1, hit.point);
-				foreach (GameObject tickSkillEffect in skillData.tickSkillEffects) {
-					Instantiate (tickSkillEffect, hit.point, Quaternion.identity);
+				foreach (GameObject effect in tickEffect) {
+					Instantiate (effect, hit.point, Quaternion.identity);
 				}
 				ITakeDamage takeDamage = hit.transform.GetComponent<ITakeDamage> ();
 				if (takeDamage != null && damageTick >= damagePeriod) {

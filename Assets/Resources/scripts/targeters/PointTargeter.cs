@@ -11,7 +11,7 @@ public class PointTargeter : MonoBehaviour {  //TODO - redo targeters for skills
 
 	void Start (){
 		rend.SetPosition (0, transform.position);
-		transform.parent = PlayerController.instance.skillOriginator;
+		transform.parent = PlayerController.instance.abilityOriginator;
 	}
 	void Update(){
 		rend.material.mainTextureOffset = new Vector2 (-Time.time, 0);

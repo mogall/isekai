@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 //TODO - make it so that when there's an unstackable item, system won't show the number and also will ignore the stack size when performing operations
-//DONOW - make it so it's not a list(why?) and you can put stuff in the container
+//TODO - make it so it's not a list(why?) and you can put stuff in the container
+//TODO - container size limits
 public class ContainerSlot : MonoBehaviour {
 	public ItemData itemData;
 	public Image itemIcon;

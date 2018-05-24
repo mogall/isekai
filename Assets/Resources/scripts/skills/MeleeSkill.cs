@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+ //REMOVE - this is unused as of now
 public class MeleeSkill : MonoBehaviour { //TODO - this is a simple skill that just has a cube hitbox in front enabled for given amount of time and that's it.
-	public SkillData skillData;
+	public AbilityData skillData;
 	public float range; //TODO - this is for simple hitbox scaling
 	public BoxCollider hitCollider;
 	public float collisionStartTime;
@@ -32,7 +32,7 @@ public class MeleeSkill : MonoBehaviour { //TODO - this is a simple skill that j
 		}
 	}
 	void OnTriggerEnter(Collider other){
-		foreach (GameObject endEffect in skillData.endSkillEffects) {
+		foreach (GameObject endEffect in skillData.endEffect) {
 			Instantiate (endEffect, other.transform.position, Quaternion.identity);
 		}
 		Destroy (this.gameObject);

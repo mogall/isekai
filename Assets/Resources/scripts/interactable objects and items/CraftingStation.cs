@@ -6,6 +6,6 @@ public class CraftingStation : Interactable {
 	public CraftStationType craftStationType;
 
 	public override void Interact(){
-		//DONOW - open a crafting window here with specific recipe types listed
+		//TODO - open a crafting window here with specific recipe types listed
 	}
 }
