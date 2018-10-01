@@ -15,7 +15,7 @@ public enum HouseTileType {NORTHWALL, SOUTHWALL, EASTWALL, WESTWALL, ENTRANCE, M
 
 //taken from pickableitem spreadsheet
 public enum WeaponType {SWORD, DAGGER, MACE, AXE, THROWN, RANGED, PLACED, WAND, STAFF};//ADD - add more according to the spreadsheet here
-public enum EquipmentSlotType{HEAD, TORSO, BELT, PANTS, BOOTS, GLOVES, MAINHAND, OFFHAND, RING, AMULET}; //compare on slot and item when drag-dropping
+public enum EquipmentSlotType{INVENTORY, HEAD, TORSO, BELT, PANTS, BOOTS, GLOVES, MAINHAND, OFFHAND, RING, AMULET}; //compare on slot and item when drag-dropping
 
 //public enum EnemyIdleType {GROUNDAREA, WALLWALKAREA, STATIONARY, RAILS, AIRRAILS, AIRAREA};
 //public enum EnemyAggroType{BEELINE, STATIONARY, KEEPDISTANCE, RUNAWAY};

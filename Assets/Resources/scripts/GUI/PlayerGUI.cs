@@ -13,6 +13,7 @@ public class PlayerGUI : MonoBehaviour {
 	List<GameObject> openPanels = new List<GameObject>();
 	public GameObject inventoryWrapper;
 	public GameObject inventoryGUIPanel;
+	public GameObject equipmentGUIPanel;
 	List<InventorySlot> inventorySlot = new List<InventorySlot>(); //TODO - why is this a list?
 	public GameObject itemDragImage;
 	public GameObject inventorySlotPrefab;
@@ -84,13 +85,21 @@ public class PlayerGUI : MonoBehaviour {
 			inventorySlot.Add (invSlot);
 		}
 	}
-	void UpdateInventorySlots(){ //TODO - this is too resource-intensive - change to callbacks?
+	void UpdateInventorySlots(){ //TODO - this is too resource-intensive - change to callbacks? //TODO - why is this mdifying slot data, and not the playerinventory? should GUI do this?
 		Debug.Log("updating inventory slots");
 		for (int i = 0; i < inventory.inventorySize; i++) {
 			if (inventory.inventory [i].stackSize < 1) {
 				inventorySlot [i].ClearSlotData ();
 			} else {
 				inventorySlot [i].AddItemInSlot (inventory.inventory [i].item, inventory.inventory[i].stackSize);
+			}
+		}
+		foreach (Transform child in equipmentGUIPanel.transform) { //DONOW FIX - this is retarded here, need to move inventory slot updating to inventory class
+			InventorySlot slot = child.GetComponent<InventorySlot> ();
+			if (slot.itemData != null) {
+				slot.AddItemInSlot (slot.itemData, slot.itemData.stackSize);
+			} else {
+				slot.ClearSlotData ();
 			}
 		}
 	}

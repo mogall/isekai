@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 //TODO - make it so that when there's an unstackable item, system won't show the number and also will ignore the stack size when performing operations
 public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
+	public bool isEquipmentSlot;
+	public EquipmentSlotType equipmentSlotType = EquipmentSlotType.INVENTORY;
 	public int slotID;
 	public ItemData itemData;
 	public Image itemIcon;
@@ -13,17 +15,21 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 	//public Button deleteButton;
 	//public Button dropButton;
 
-	public void AddItemInSlot(ItemData data, int stackSize){
+	public void AddItemInSlot(ItemData data, int stackSize){ //DONOW - MOVE TO SLOT BASE CLASS
 		itemData = data;
 		itemIcon.sprite = itemData.uiSprite;
-		stackCounter.text = stackSize.ToString();
+		if (!isEquipmentSlot) {
+			stackCounter.text = stackSize.ToString();
+		}
 		//deleteButton.interactable = true;
 		//dropButton.interactable = true;
 	}
 	public void ClearSlotData(){
 		itemData = null;
 		itemIcon.sprite = null;
-		stackCounter.text = ("0");
+		if (!isEquipmentSlot) {
+			stackCounter.text = ("0");
+		}
 		//deleteButton.interactable = false;
 		//dropButton.interactable = false;
 	}
@@ -31,10 +37,15 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 		//print ("started drag");
 	}
 	public void OnDrag(PointerEventData data){
-		PlayerInventory.instance.SlotDrag (this);
+		if (itemData != null) {
+			PlayerInventory.instance.SlotDrag (this);
+		}
 	}
 	public void OnEndDrag (PointerEventData data){
-		PlayerInventory.instance.EndSlotDrag (this);
+		if (itemData != null) {
+			PlayerInventory.instance.EndSlotDrag (this);
+		}
+
 	}
 
 	/*public void DragItem(){

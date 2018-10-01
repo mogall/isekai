@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 public interface ITakeDamage{ //use this on an entity that can receive damage(like an enemy, a monster)
 	void TakeDamage (int damage);
@@ -9,6 +10,11 @@ public interface IEnemyIdleBehaviour{ //use this on a script that defines idle e
 public interface IEnemyAggroBehaviour{ //use this on a script that defines behaviour of an enemy that has detected a target and is actively "pursuing" it.
 	void TakeControl();
 }
+/*public interface IInventorySlotDragEvent{ //REMOVE - not needed
+	void OnBeginDrag (PointerEventData data);
+	void OnDrag (PointerEventData data);
+	void OnEndDrag (PointerEventData data);
+}*/
 
 /*public interface ISkillBarUseable{ //use this on an element that can be placed on a skill bar and used (like a spell or a consumable)
 	void Use();
